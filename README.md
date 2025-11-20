@@ -75,44 +75,22 @@ $prompt = $client->prompts->get('prompt_id_here', [
 #### Get a Specific Version
 
 ```php
-$prompt = $client->prompts->getVersion('prompt_id_here', 'v1.0.0', [
+$prompt = $client->prompts->getVersion('prompt_id_here', '1.0.0', [
     'variables' => ['name' => 'John']
 ]);
 ```
 
-#### List All Prompts
+#### Get Prompts for a Project
 
 ```php
-$prompts = $client->prompts->list([
+$prompts = $client->prompts->getProjectPrompts('project_id_here', [
     'page' => 1,
-    'per_page' => 20
+    'per_page' => 20,
+    'variables' => [
+        'name' => 'John',
+        'email' => 'john@example.com'
+    ]
 ]);
-```
-
-#### Create a Prompt
-
-```php
-$prompt = $client->prompts->create([
-    'name' => 'Welcome Email',
-    'system_content' => 'You are a helpful assistant.',
-    'user_content' => 'Write an email to {{name}}',
-    'variables' => ['name']
-]);
-```
-
-#### Update a Prompt
-
-```php
-$prompt = $client->prompts->update('prompt_id_here', [
-    'name' => 'Updated Welcome Email',
-    'system_content' => 'You are a friendly assistant.'
-]);
-```
-
-#### Delete a Prompt
-
-```php
-$client->prompts->delete('prompt_id_here');
 ```
 
 ### Projects
@@ -130,29 +108,6 @@ $projects = $client->projects->list([
     'page' => 1,
     'per_page' => 20
 ]);
-```
-
-#### Create a Project
-
-```php
-$project = $client->projects->create([
-    'name' => 'My Project',
-    'description' => 'Project description'
-]);
-```
-
-#### Update a Project
-
-```php
-$project = $client->projects->update('project_id_here', [
-    'name' => 'Updated Project Name'
-]);
-```
-
-#### Delete a Project
-
-```php
-$client->projects->delete('project_id_here');
 ```
 
 ## Helper Classes

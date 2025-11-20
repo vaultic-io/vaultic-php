@@ -59,7 +59,7 @@ class Prompts
             }
         }
         
-        $prompt = $this->client->get("/prompts/{$promptId}/versions/{$version}", $queryParams);
+        $prompt = $this->client->get("prompts/{$promptId}/version/{$version}", $queryParams);
         
         // If variables were provided, replace them in the response
         if (isset($options['variables']) && is_array($options['variables']) && !empty($options['variables'])) {
@@ -70,12 +70,13 @@ class Prompts
     }
 
     /**
-     * List all prompts
+     * Get all prompts for a specific project
      *
-     * @param array $options Query parameters (page, per_page, etc.)
-     * @return array List of prompts
+     * @param string $projectId The project ID
+     * @param array $options Query parameters (page, per_page, variables, etc.)
+     * @return array List of prompts for the project
      */
-    public function list(array $options = []): array
+    public function getProjectPrompts(string $projectId, array $options = []): array
     {
         $queryParams = [];
         
@@ -87,41 +88,22 @@ class Prompts
             $queryParams['per_page'] = $options['per_page'];
         }
         
-        return $this->client->get("/prompts", $queryParams);
-    }
-
-    /**
-     * Create a new prompt
-     *
-     * @param array $data Prompt data
-     * @return array The created prompt
-     */
-    public function create(array $data): array
-    {
-        return $this->client->post("/prompts", $data);
-    }
-
-    /**
-     * Update a prompt
-     *
-     * @param string $promptId The prompt ID
-     * @param array $data Updated prompt data
-     * @return array The updated prompt
-     */
-    public function update(string $promptId, array $data): array
-    {
-        return $this->client->put("/prompts/{$promptId}", $data);
-    }
-
-    /**
-     * Delete a prompt
-     *
-     * @param string $promptId The prompt ID
-     * @return array Empty array on success
-     */
-    public function delete(string $promptId): array
-    {
-        return $this->client->delete("/prompts/{$promptId}");
+        if (isset($options['variables']) && is_array($options['variables'])) {
+            foreach ($options['variables'] as $key => $value) {
+                $queryParams["variables[{$key}]"] = $value;
+            }
+        }
+        
+        $result = $this->client->get("projects/{$projectId}/prompts", $queryParams);
+        
+        // If variables were provided, replace them in the response
+        if (isset($options['variables']) && is_array($options['variables']) && !empty($options['variables']) && isset($result['data'])) {
+            foreach ($result['data'] as &$prompt) {
+                $prompt = VariableReplacer::replace($prompt, $options['variables']);
+            }
+        }
+        
+        return $result;
     }
 }
 
