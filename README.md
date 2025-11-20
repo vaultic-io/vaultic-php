@@ -2,6 +2,7 @@
 
 Official PHP SDK for the Vaultic API. This SDK provides a simple and intuitive interface for interacting with the Vaultic API to manage prompts, projects, and more.
 
+
 ## Installation
 
 Install the package via Composer:
