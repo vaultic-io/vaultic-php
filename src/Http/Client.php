@@ -24,7 +24,7 @@ class Client
     public function __construct(array $config)
     {
         $this->apiKey = $config['apiKey'] ?? '';
-        $baseUrl = $config['baseUrl'] ?? 'http://127.0.0.1:8001/api/v1/';
+        $baseUrl = $config['baseUrl'] ?? 'https://app.vaultic.io/api/v1/';
         $timeout = $config['timeout'] ?? 30;
         $this->enableLogging = $config['enableLogging'] ?? false;
 
